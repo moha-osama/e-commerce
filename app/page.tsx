@@ -1,101 +1,70 @@
+import Banner from "@/components/Banner/Banner";
+import Hero from "@/components/Hero/Hero";
+import Category from "@/components/Category/Category";
+import Products from "@/components/Products/Products";
 import Image from "next/image";
 
-export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+export default async function Home() {
+  const categoriesData = await GetCategories();
+  const productsData = await GetProducts();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const [categories, products] = await Promise.all([
+    categoriesData,
+    productsData,
+  ]);
+
+  return (
+    <>
+      <Hero />
+      <Banner />
+      <Category categoriesData={categories} />
+      <Products productsData={products} />
+      <div className="relative ">
+        <div className="text-center w-4/5 flex flex-col items-center justify-center z-50 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
+          <h1 className="text-5xl font-thin tracking-tighter leading-[4.5rem] text-white">
+            Big Summer <strong className="font-bold">Sale</strong>
+          </h1>
+          <p className="text-[#787878] text-md font-normal leading-8">
+            Commodo fames vitae vitae leo mauris in. Eu consequat.
+          </p>
+          <div className="w-full flex items-center justify-center py-10">
+            <button className="text-white py-4 px-14 border border-white rounded-md font-medium">
+              Shop Now
+            </button>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        <div className="relative">
           <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+            height={448}
+            width={1600}
+            quality={100}
+            className="object-cover w-screen hidden md:block"
+            src="/Banner2.png"
+            alt="Banner"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
           <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+            height={600}
+            width={1600}
+            quality={100}
+            className="object-cover w-screen md:hidden"
+            src="/Banner2-sm.png"
+            alt="Banner"
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        </div>
+      </div>
+    </>
   );
+}
+
+async function GetCategories() {
+  const category = await fetch("https://fakestoreapi.in/api/products/category");
+  const categoryData = await category.json();
+  return { props: { categoryData } };
+}
+
+async function GetProducts() {
+  const products = await fetch("https://fakestoreapi.in/api/products");
+  const productsData = await products.json();
+
+  return { props: { productsData } };
 }
