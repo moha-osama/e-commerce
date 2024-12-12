@@ -26,7 +26,7 @@ const DesktopNav = () => {
       <nav className="flex-[2] flex justify-center lg:justify-end">
         <ul className="flex w-fit items-center gap-8 lg:gap-14">
           {navItems.map((item) => (
-            <Link href="/" key={item.id}>
+            <Link href={item.href} key={item.id}>
               {item.navTitle}
             </Link>
           ))}
