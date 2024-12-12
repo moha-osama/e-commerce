@@ -21,14 +21,19 @@ body {
 }
 
 @layer utilities {
+  .container {
+  }
+
   .hero-bg {
     background: linear-gradient(91deg, #211c24 0.64%, #211c24 101%);
   }
 
-  .banner-title {
-  }
-  .banner-title span {
-  }
   @media screen and (min-width: 769px) {
+  }
+
+  @media screen and (min-width: 1536px) {
+    .container {
+      padding: 0 4rem;
+    }
   }
 }

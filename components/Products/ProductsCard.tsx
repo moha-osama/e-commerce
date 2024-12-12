@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 interface Product {
   id: number;
@@ -21,35 +25,55 @@ interface ProductsCard {
 }
 
 const ProductsCard = ({ product }: ProductsCard) => {
+  const [imageLoading, setImageLoading] = React.useState(true);
   return (
-    <div className="bg-[#F6F6F6] rounded-lg py-6 px-4 max-w-52">
+    <div className="bg-[#F6F6F6] rounded-lg py-6 px-4 w-full">
       <div className="flex flex-col items-center justify-center gap-5">
         <div className="relative">
+          {imageLoading && <Skeleton className="h-64" />}
           <Image
-            className="object-contain rounded-md min-h-[10rem]"
-            width={160}
-            height={160}
+            className={`object-contain rounded-md ${
+              !imageLoading ? "h-[14rem] w-full" : "h-0"
+            }`}
+            width={1024}
+            height={1024}
             quality={100}
             src={product.image}
             alt={product.title}
+            onLoadingComplete={() => setImageLoading(false)}
           />
         </div>
-        <div className="flex flex-col items-center justify-center ">
-          <h1 className="text-[#000] text-center text-md font-medium leading-6 line-clamp-2">
-            {product.title}
-          </h1>
-          {product.onSale && product.discount && (
-            <span className="text-green-500 pt-3 text-2xl font-semibold left-6 tracking-wider">
-              ${product.price - product.discount}
-            </span>
+        <div className="w-full">
+          {!imageLoading ? (
+            <h1 className="text-[#000]  text-md font-medium leading-6 line-clamp-2 min-h-12">
+              {product.title}
+            </h1>
+          ) : (
+            <Skeleton className="" count={2} />
           )}
-          <p
-            className={`text-[#000] font-semibold left-6 tracking-wider ${
-              product.onSale ? "line-through" : "text-2xl"
+          {imageLoading && <Skeleton />}
+          <div
+            className={`flex flex-col items-center justify-center ${
+              !imageLoading && "min-h-16"
             }`}
           >
-            ${product.price}
-          </p>
+            {!imageLoading && (
+              <>
+                {product.onSale && product.discount && (
+                  <span className="text-green-500 pt-3 text-2xl font-semibold left-6 tracking-wider">
+                    ${product.price - product.discount}
+                  </span>
+                )}
+                <p
+                  className={`text-[#000] font-semibold left-6 tracking-wider ${
+                    product.onSale ? "line-through" : "text-2xl"
+                  }`}
+                >
+                  ${product.price}
+                </p>
+              </>
+            )}
+          </div>
         </div>
         <div className="flex items-center gap-2 justify-center w-full">
           <button className="bg-black text-white py-3 w-11/12 rounded-lg">

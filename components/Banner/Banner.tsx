@@ -32,7 +32,7 @@ const bannerItems = [
 
 const Banner = () => {
   return (
-    <div className="container mx-auto">
+    <div className="mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-4 row-span-2">
         <div className="min-h-[31.5rem] md:min-h-max order-3 md:order-1 md:col-span-2">
           {/* Playstation 5 */}

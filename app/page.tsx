@@ -6,19 +6,15 @@ import Image from "next/image";
 
 export default async function Home() {
   const categoriesData = await GetCategories();
-  const productsData = await GetProducts();
 
-  const [categories, products] = await Promise.all([
-    categoriesData,
-    productsData,
-  ]);
+  const [categories] = await Promise.all([categoriesData]);
 
   return (
     <>
       <Hero />
       <Banner />
       <Category categoriesData={categories} />
-      <Products productsData={products} />
+      <Products />
       <div className="relative ">
         <div className="text-center w-4/5 flex flex-col items-center justify-center z-50 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2">
           <h1 className="text-5xl font-thin tracking-tighter leading-[4.5rem] text-white">
@@ -60,11 +56,4 @@ async function GetCategories() {
   const category = await fetch("https://fakestoreapi.in/api/products/category");
   const categoryData = await category.json();
   return { props: { categoryData } };
-}
-
-async function GetProducts() {
-  const products = await fetch("https://fakestoreapi.in/api/products");
-  const productsData = await products.json();
-
-  return { props: { productsData } };
 }
